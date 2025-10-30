@@ -2,105 +2,62 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { io } from "socket.io-client";
 
-// Anslut till din Socket.IO-server
+// Vi vill vid start av appen, automatiskt ansluta till servern
 const socket = io("ws://10.100.2.139:3001");
 
 function App() {
   const [connected, setConnected] = useState(false);
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-    []
-  );
-  const [username, setUsername] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentMessage, setCurrentMessage] = useState("");
+  const [messages, setMessages] = useState<string[]>([]);
 
-  const connectionStatus = connected ? "✅ Connected" : "❌ Disconnected";
+  const connectionStatus = connected ? "Connected" : "Disconnected";
 
-  // Hantera socket-händelser
   useEffect(() => {
-    socket.on("connect", () => setConnected(true));
-    socket.on("disconnect", () => setConnected(false));
+    // När en anslutning har upprättats
+    socket.on("connect", () => {
+      setConnected(true);
+    });
 
-    // När ett nytt meddelande tas emot
+    // När anslutningen har avslutats
+    socket.on("disconnect", () => {
+      setConnected(false);
+    });
+
     socket.on("cir_ter", (data: string) => {
-      try {
-        const parsed = JSON.parse(data);
-        setMessages((prev) => [...prev, parsed]);
-      } catch (error) {
-        console.error("Kunde inte tolka meddelande:", data);
-      }
+      console.log("Data received: ", data);
+
+      // const receivedMessage = JSON.parse(data); // Omvandlar JSON-string till objekt/array
+
+      setMessages((prev) => [...prev, JSON.stringify(data)]);
+
+      console.log(messages);
     });
 
     return () => {
+      // Kod som körs när komponenten avmonteras
       socket.off("connect");
       socket.off("disconnect");
       socket.off("cir_ter");
     };
   }, []);
 
-  // Skicka ett meddelande
-  const sendMessage = () => {
-    if (!currentMessage.trim()) return;
-
+  const emitEvent = () => {
     const message = {
-      sender: username,
-      text: currentMessage,
+      message: "Hej där",
+      sender: "Ahmad ardal",
     };
 
-    socket.emit("cir_ter", JSON.stringify(message));
-    setMessages((prev) => [...prev, message]);
-    setCurrentMessage("");
-  };
+    const stringifiedMessage = JSON.stringify(message);
 
-  // Hantera login
-  const handleLogin = () => {
-    if (username.trim()) {
-      setIsLoggedIn(true);
-    }
+    socket.emit("cir_ter", stringifiedMessage);
   };
 
   return (
-    <div id="app">
-      <h2>{connectionStatus}</h2>
+    <div id="messages-container">
+      <p>{connectionStatus}</p>
 
-      {!isLoggedIn ? (
-        <div className="login-container">
-          <h3>Skriv ditt namn för att logga in:</h3>
-          <input
-            type="text"
-            placeholder="Ditt namn..."
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <button onClick={handleLogin}>Logga in</button>
-        </div>
-      ) : (
-        <div className="chat-container">
-          <h3>Inloggad som: {username}</h3>
-
-          <div className="messages-box">
-            {messages.map((msg, i) => (
-              <p
-                key={i}
-                className={msg.sender === username ? "own-message" : "other-message"}
-              >
-                <strong>{msg.sender}:</strong> {msg.text}
-              </p>
-            ))}
-          </div>
-
-          <div className="input-area">
-            <input
-              type="text"
-              placeholder="Skriv ett meddelande..."
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            />
-            <button onClick={sendMessage}>Skicka</button>
-          </div>
-        </div>
-      )}
+      {messages.map((message) => (
+        <p>{message}</p>
+      ))}
     </div>
   );
 }
