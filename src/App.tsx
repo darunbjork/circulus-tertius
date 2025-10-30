@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { io } from "socket.io-client";
+import Login from "./components/Login";
 
 // Vi vill vid start av appen, automatiskt ansluta till servern
 const socket = io("ws://10.100.2.139:3001");
@@ -58,6 +59,8 @@ function App() {
       {messages.map((message) => (
         <p>{message}</p>
       ))}
+
+      <Login />
    
     </div>
   );
