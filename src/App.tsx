@@ -22,7 +22,7 @@ function App() {
       setConnected(false);
     });
 
-    socket.on("cir-ter", (data: string) => {
+    socket.on("cir_ter", (data: string) => {
       console.log("Data received: ", data);
 
       // const receivedMessage = JSON.parse(data); // Omvandlar JSON-string till objekt/array
@@ -36,7 +36,7 @@ function App() {
       // Kod som körs när komponenten avmonteras
       socket.off("connect");
       socket.off("disconnect");
-      socket.off("cir-ter");
+      socket.off("cir_ter");
     };
   }, []);
 
@@ -48,7 +48,7 @@ function App() {
 
     const stringifiedMessage = JSON.stringify(message);
 
-    socket.emit("cir-ter", stringifiedMessage);
+    socket.emit("cir_ter", stringifiedMessage);
   };
 
   return (
@@ -58,6 +58,7 @@ function App() {
       {messages.map((message) => (
         <p>{message}</p>
       ))}
+   
     </div>
   );
 }
