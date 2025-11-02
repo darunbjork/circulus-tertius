@@ -1,0 +1,23 @@
+.msg {
+    margin: 15px;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    padding: 20px;
+    background-color: #CCC;
+    max-width: 300px;
+}
+.msg-date, .msg-id, .msg-chatroom{
+    font-size: 0.5em;
+}
+.msg-header{
+    display: flex;
+    justify-content: end;
+}
+.msg-footer{
+    display: flex;
+    justify-content: space-between;
+}
+.msg-content{
+    margin: 5px;
+    padding: 5px;
+}

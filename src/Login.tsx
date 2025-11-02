@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 function Login() {
   const [logins, setLogins] = useState([]);
   const [userName, setUserName] = useState("");
@@ -20,16 +20,9 @@ function Login() {
       {logins.length}
       <br />
       {userName}
-      <button onClick={AddNewUser}>Add Nmae</button>
-      <input type="text" placeholder="write some shot" onChange={(event) => setUserName(event.target.value)}/>
+      <button onClick={AddNewUser}>Add your</button>
+      <input type="text" placeholder="write something" onChange={(event) => setUserName(event.target.value)} />
     </div>
-  )
+  );
 }
-export default Login
-
-
-
-
-
-
-
+export default Login;

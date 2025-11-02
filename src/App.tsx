@@ -1,67 +1,88 @@
 import { useEffect, useState } from "react";
-import "./App.css";
+import "./msgdetails/msgdetail.css";
 import { io } from "socket.io-client";
-import Login from "./components/Login";
+import MessagesDetails from "./msgdetails/messagesDetails";
 
-// Vi vill vid start av appen, automatiskt ansluta till servern
-const socket = io("ws://10.100.2.139:3001");
+// Skapar anslutning till servern
+const socket = io("wss://socket.chasqui.se");
+const room = ["cir_ter","chat","general"]
+const actualChatRoom = room[0]
 
 function App() {
   const [connected, setConnected] = useState(false);
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
 
-  const connectionStatus = connected ? "Connected" : "Disconnected";
+  const connectionStatus = connected ? "🟢 Uppkopplad" : "🔴 Nedkopplad";
 
+  // === Hantera anslutning och inkommande meddelanden ===
   useEffect(() => {
     // När en anslutning har upprättats
     socket.on("connect", () => {
       setConnected(true);
+      console.log("Connected to server:", socket.id);
     });
 
-    // När anslutningen har avslutats
+    // När anslutningen bryts
     socket.on("disconnect", () => {
       setConnected(false);
     });
 
-    socket.on("cir_ter", (data: string) => {
+    // När ett meddelande tas emot
+    socket.on(actualChatRoom, (data) => {
       console.log("Data received: ", data);
-
-      // const receivedMessage = JSON.parse(data); // Omvandlar JSON-string till objekt/array
-
-      setMessages((prev) => [...prev, JSON.stringify(data)]);
-
-      console.log(messages);
+      const newMessage = {
+        id: data.id || socket.id, // Om servern skickar id, annars ditt eget
+        date: data.date || new Date().toLocaleString(),
+        msg: data.msg || data, // Om servern skickar objekt eller ren sträng
+        room: actualChatRoom, 
+      };
+      setMessages((prev) => [...prev, newMessage]);
     });
 
+    // Städa upp event listeners när komponenten avmonteras
     return () => {
-      // Kod som körs när komponenten avmonteras
       socket.off("connect");
       socket.off("disconnect");
-      socket.off("cir_ter");
+      socket.off(actualChatRoom);
     };
   }, []);
 
-  const emitEvent = () => {
-    const message = {
-      message: "Hej där",
-      sender: "Ahmad ardal",
+  // === Skicka meddelande till servern ===
+  const sendMessage = () => {
+    if (!inputMessage.trim()) return; // Tomt meddelande? gör inget
+
+    // Skapa meddelandeobjekt
+    const msgObject = {
+      id: socket.id,
+      msg: inputMessage,
+      date: new Date().toLocaleString(),
+      room: actualChatRoom,
     };
 
-    const stringifiedMessage = JSON.stringify(message);
+    // Skicka till servern
+    socket.emit(actualChatRoom, msgObject);
 
-    socket.emit("cir_ter", stringifiedMessage);
+    // Visa direkt i din egen lista (innan servern svarar)
+    setMessages((prev) => [...prev, msgObject]);
+
+    // Nollställ inputfältet
+    setInputMessage("");
   };
 
   return (
     <div id="messages-container">
-      <p>{connectionStatus}</p>
-
-      {messages.map((message) => (
-        <p>{message}</p>
-      ))}
-
-      <Login />
-   
+      <MessagesDetails messages={messages} />
+      <div className="input-section">
+        <input
+          type="text"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          placeholder="Skriv ett meddelande..."
+          />
+        <button onClick={sendMessage}>Skicka</button>
+        <p>{connectionStatus}</p>
+      </div>
     </div>
   );
 }
