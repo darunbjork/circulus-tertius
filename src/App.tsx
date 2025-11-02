@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./msgdetails/msgdetail.css";
 import { io } from "socket.io-client";
 import MessagesDetails from "./msgdetails/messagesDetails";
+import type { typeMessages } from "./tsdeclaration";
 
 // Skapar anslutning till servern
 const socket = io("wss://socket.chasqui.se");
@@ -10,7 +11,7 @@ const actualChatRoom = room[0]
 
 function App() {
   const [connected, setConnected] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<typeMessages[]>([]);
   const [inputMessage, setInputMessage] = useState("");
 
   const connectionStatus = connected ? "🟢 Uppkopplad" : "🔴 Nedkopplad";
@@ -29,11 +30,11 @@ function App() {
     });
 
     // När ett meddelande tas emot
-    socket.on(actualChatRoom, (data) => {
+    socket.on(actualChatRoom, (data: typeMessages) => {
       console.log("Data received: ", data);
       const newMessage = {
         id: data.id || socket.id, // Om servern skickar id, annars ditt eget
-        date: data.date || new Date().toLocaleString(),
+        date: data.date || new Date(),
         msg: data.msg || data, // Om servern skickar objekt eller ren sträng
         room: actualChatRoom, 
       };
@@ -53,10 +54,10 @@ function App() {
     if (!inputMessage.trim()) return; // Tomt meddelande? gör inget
 
     // Skapa meddelandeobjekt
-    const msgObject = {
+    const msgObject: typeMessages = {
       id: socket.id,
       msg: inputMessage,
-      date: new Date().toLocaleString(),
+      date: new Date(),
       room: actualChatRoom,
     };
 
