@@ -3,11 +3,12 @@ import "./msgdetails/msgdetail.css";
 import { io } from "socket.io-client";
 import MessagesDetails from "./msgdetails/messagesDetails";
 import type { typeMessages } from "./tsdeclaration";
+import Login from "./Login";
 
 // Skapar anslutning till servern
 const socket = io("wss://socket.chasqui.se");
-const room = ["cir_ter","chat","general"]
-const actualChatRoom = room[0]
+const room = ["cir_ter", "chat", "general"];
+const actualChatRoom = room[0];
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -36,7 +37,7 @@ function App() {
         id: data.id || socket.id, // Om servern skickar id, annars ditt eget
         date: data.date || new Date().toLocaleString(),
         msg: data.msg || data, // Om servern skickar objekt eller ren sträng
-        room: actualChatRoom, 
+        room: actualChatRoom,
       };
       setMessages((prev) => [...prev, newMessage]);
     });
@@ -73,7 +74,7 @@ function App() {
 
   return (
     <div id="messages-container">
-      <MessagesDetails messages={messages} />
+      {/*  <MessagesDetails messages={messages} />
       <div className="input-section">
         <input
           type="text"
@@ -83,7 +84,8 @@ function App() {
           />
         <button onClick={sendMessage}>Skicka</button>
         <p>{connectionStatus}</p>
-      </div>
+      </div> */}
+      <Login />
     </div>
   );
 }

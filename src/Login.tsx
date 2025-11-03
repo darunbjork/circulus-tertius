@@ -1,23 +1,23 @@
 import { useState } from "react";
 function Login() {
-  const [logins, setLogins] = useState([]);
+  const [userLogin, setUserLogin] = useState([]);
   const [userName, setUserName] = useState("");
   const AddNewUser = () => {
     if (userName === "") {
       return;
     }
-    const newId = Date.now();
+
     const newUsers = {
-      id: newId,
+      id: socket.id,
       text: userName,
     };
     // const saveUserName = localStorage.setItem("Users :", newUsers.text)
-    setLogins(newUsers);
-    setUserName("");
+    setUserLogin([...userLogin, newUsers]);
+    setUserName(""); //Clear the input
   };
   return (
     <div>
-      {logins.length}
+      {login.length}
       <br />
       {userName}
       <button onClick={AddNewUser}>Add your</button>
