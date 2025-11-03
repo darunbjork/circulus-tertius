@@ -1,6 +1,22 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2em 0 0;
   text-align: center;
+}
+
+#container {
+  display: flex;
+  justify-content: space-around;
+  height: 90vh;
+  width: 100wp;
+  overflow: hidden;
+  
+}
+.interaction-container {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+border-left: 1px solid #fff;
+padding: 20px;
 }

@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import MessagesDetails from "./msgdetails/messagesDetails";
 import type { typeMessages } from "./tsdeclaration";
 import Login from "./Login";
+import "./App.css"
 
 /*
 // Skapar anslutning till servern
@@ -74,35 +75,42 @@ function App() {
 
     // Skicka till servern
     socket.emit(actualChatRoom, msgObject);
-
-    // Visa direkt i din egen lista (innan servern svarar)
     setMessages((prev) => [...prev, msgObject]);
-
-    // Nollställ inputfältet
     setInputMessage("");
   };
 
   return (
-    <div id="messages-container">
-      <MessagesDetails messages={messages} userName={userName} />
-      <p>{connectionStatus}</p>
-      {/*  */}
-
-      <div className="input-section">
-        <textarea
-          rows="3"
-          cols="40"
-          placeholder="Skriv ditt meddelande"
-          onChange={(e) => setInputMessage(e.target.value)}
-        ></textarea>
-        <button onClick={sendMessage}>Skicka</button>
+    <div id="container">
+      <div className="messages">
+        <MessagesDetails messages={messages} userName={userName} />
       </div>
-      <Login
-        userName={userName}
-        setUserLogin={setUserLogin}
-        setUserName={setUserName}
-        userLogin={userLogin}
-      />
+      <div className="interaction-container">
+        <div className="status-holder">
+          <p className="connection-status">{connectionStatus}</p>
+          <p className="actual-usr">{userName}</p>
+        </div>
+        <div className="menti-container">
+          <div className="list-users"></div>
+          <div className="input-container">
+            <div className="input-section">
+              <textarea
+                rows="3"
+                cols="40"
+                placeholder="Skriv ditt meddelande"
+                onChange={(e) => setInputMessage(e.target.value)}
+              ></textarea>
+              <button onClick={sendMessage}>Skicka</button>
+            </div>
+            <Login
+              userName={userName}
+              setUserLogin={setUserLogin}
+              setUserName={setUserName}
+              userLogin={userLogin}
+            />
+          </div>
+        </div>
+      </div>
+      {/*  */}
     </div>
   );
 }
