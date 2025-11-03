@@ -30,11 +30,11 @@ function App() {
     });
 
     // När ett meddelande tas emot
-    socket.on(actualChatRoom, (data: typeMessages) => {
+    socket.on(actualChatRoom, (data) => {
       console.log("Data received: ", data);
       const newMessage = {
         id: data.id || socket.id, // Om servern skickar id, annars ditt eget
-        date: data.date || new Date(),
+        date: data.date || new Date().toLocaleString(),
         msg: data.msg || data, // Om servern skickar objekt eller ren sträng
         room: actualChatRoom, 
       };
@@ -54,10 +54,10 @@ function App() {
     if (!inputMessage.trim()) return; // Tomt meddelande? gör inget
 
     // Skapa meddelandeobjekt
-    const msgObject: typeMessages = {
+    const msgObject = {
       id: socket.id,
       msg: inputMessage,
-      date: new Date(),
+      date: new Date().toLocaleString(),
       room: actualChatRoom,
     };
 
