@@ -1,9 +1,10 @@
-const MessagesDetails = ({ messages }) => {
+const MessagesDetails = ({ messages,userName }) => {
   return (
     <>
       {messages.map((m) => (
         <div className="msg">
           <div className="msg-header">
+            <p className="usr-name">{userName}</p>
             <p className="msg-date">{m.date}</p>
           </div>
           <div className="msg-content-holder">
@@ -12,7 +13,7 @@ const MessagesDetails = ({ messages }) => {
           <div className="msg-footer">
             <p className="msg-id">
               <strong>ID: </strong>
-              {m.id}
+              {m.idm}
             </p>
             <p className="msg-chatroom">
               <strong>Room: </strong>

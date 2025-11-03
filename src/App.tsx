@@ -6,14 +6,30 @@ import type { typeMessages } from "./tsdeclaration";
 import Login from "./Login";
 
 // Skapar anslutning till servern
-const socket = io("wss://socket.chasqui.se");
-const room = ["cir_ter", "chat", "general"];
+const socket = io("wss://api.leetcode.se/", {path: "/FOS25" });
+/* wss://api.leetcode.se/
+wss://socket.chasqui.se */
+const room = ["chat_room", "chat", "general"];
 const actualChatRoom = room[0];
 
 function App() {
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<typeMessages[]>([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [userLogin, setUserLogin] = useState([]);
+  const [userName, setUserName] = useState("");
+
+  const AddNewUser = () => {
+    if (userName === "") {
+      return;
+    }
+    const newUsers = {
+      id: Date.now(),
+      username: userName,
+    };
+    setUserLogin([...userLogin, newUsers]);
+    
+  };
 
   const connectionStatus = connected ? "🟢 Uppkopplad" : "🔴 Nedkopplad";
 
@@ -34,10 +50,11 @@ function App() {
     socket.on(actualChatRoom, (data) => {
       console.log("Data received: ", data);
       const newMessage = {
-        id: data.id || socket.id, // Om servern skickar id, annars ditt eget
+        idm: data.id || socket.id, // Om servern skickar id, annars ditt eget
         date: data.date || new Date().toLocaleString(),
         msg: data.msg || data, // Om servern skickar objekt eller ren sträng
         room: actualChatRoom,
+        user: userName,
       };
       setMessages((prev) => [...prev, newMessage]);
     });
@@ -56,10 +73,11 @@ function App() {
 
     // Skapa meddelandeobjekt
     const msgObject = {
-      id: socket.id,
+      idm: socket.id,
       msg: inputMessage,
       date: new Date().toLocaleString(),
       room: actualChatRoom,
+      user: userName,
     };
 
     // Skicka till servern
@@ -74,7 +92,8 @@ function App() {
 
   return (
     <div id="messages-container">
-      {/*  <MessagesDetails messages={messages} />
+      <MessagesDetails messages={messages} userName={userName} />
+
       <div className="input-section">
         <input
           type="text"
@@ -84,8 +103,20 @@ function App() {
           />
         <button onClick={sendMessage}>Skicka</button>
         <p>{connectionStatus}</p>
-      </div> */}
-      <Login />
+      </div> 
+      <input
+        type="text"
+        placeholder="write something"
+        onChange={(e)=> setUserName(e.target.value)}
+      />
+      <button onClick={AddNewUser}>Add name</button>
+        
+      {userLogin.map((ul) =>(
+        <Login 
+        loginRef={ul}
+        />
+      ))}
+      
     </div>
   );
 }

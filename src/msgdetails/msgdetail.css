@@ -11,7 +11,11 @@
 }
 .msg-header{
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+}
+.usr-name{
+    color: rgb(8, 8, 62);
+    text-shadow: 1px 1px 1px #fff;
 }
 .msg-footer{
     display: flex;
