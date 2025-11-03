@@ -5,12 +5,16 @@ import MessagesDetails from "./msgdetails/messagesDetails";
 import type { typeMessages } from "./tsdeclaration";
 import Login from "./Login";
 
+/*
 // Skapar anslutning till servern
-const socket = io("wss://api.leetcode.se/", {path: "/FOS25" });
-/* wss://api.leetcode.se/
-wss://socket.chasqui.se */
+// Ahmads server
+const socket = io("wss://api.leetcode.se/", {path: "/FOS25" }); */
+
+const socket = io("wss://socket.chasqui.se");
+
 const room = ["chat_room", "chat", "general"];
 const actualChatRoom = room[0];
+/* const userName = "TestOnTrain"; */
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -18,18 +22,6 @@ function App() {
   const [inputMessage, setInputMessage] = useState("");
   const [userLogin, setUserLogin] = useState([]);
   const [userName, setUserName] = useState("");
-
-  const AddNewUser = () => {
-    if (userName === "") {
-      return;
-    }
-    const newUsers = {
-      id: Date.now(),
-      username: userName,
-    };
-    setUserLogin([...userLogin, newUsers]);
-    
-  };
 
   const connectionStatus = connected ? "🟢 Uppkopplad" : "🔴 Nedkopplad";
 
@@ -50,7 +42,7 @@ function App() {
     socket.on(actualChatRoom, (data) => {
       console.log("Data received: ", data);
       const newMessage = {
-        idm: data.id || socket.id, // Om servern skickar id, annars ditt eget
+        idm: data.id || socket.id, // Om servern skickar id, annars ditt eget "data.id || socket.id"
         date: data.date || new Date().toLocaleString(),
         msg: data.msg || data, // Om servern skickar objekt eller ren sträng
         room: actualChatRoom,
@@ -73,7 +65,7 @@ function App() {
 
     // Skapa meddelandeobjekt
     const msgObject = {
-      idm: socket.id,
+      idm: socket.id, //socket.id,
       msg: inputMessage,
       date: new Date().toLocaleString(),
       room: actualChatRoom,
@@ -93,32 +85,25 @@ function App() {
   return (
     <div id="messages-container">
       <MessagesDetails messages={messages} userName={userName} />
+      <p>{connectionStatus}</p>
+      {/*  */}
 
       <div className="input-section">
-        <input
-          type="text"
-          value={inputMessage}
+        <textarea
+          rows="3"
+          cols="40"
+          placeholder="Skriv ditt meddelande"
           onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Skriv ett meddelande..."
-          />
+        ></textarea>
         <button onClick={sendMessage}>Skicka</button>
-        <p>{connectionStatus}</p>
-      </div> 
-      <input
-        type="text"
-        placeholder="write something"
-        onChange={(e)=> setUserName(e.target.value)}
+      </div>
+      <Login
+        userName={userName}
+        setUserLogin={setUserLogin}
+        setUserName={setUserName}
+        userLogin={userLogin}
       />
-      <button onClick={AddNewUser}>Add name</button>
-        
-      {userLogin.map((ul) =>(
-        <Login 
-        loginRef={ul}
-        />
-      ))}
-      
     </div>
   );
 }
-
 export default App;
