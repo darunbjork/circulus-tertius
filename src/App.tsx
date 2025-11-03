@@ -37,9 +37,9 @@ function App() {
     socket.on(actualChatRoom, (data) => {
       console.log("Data received: ", data);
       const newMessage = {
-        idm: data.id || socket.id, // Om servern skickar id, annars ditt eget "data.id || socket.id"
+        id: data.id || socket.id, // Om servern skickar id, annars ditt eget "data.id || socket.id"
         date: data.date || new Date().toLocaleString(),
-        msg: data.msg || data, // Om servern skickar objekt eller ren sträng
+        message: data.msg || data, // Om servern skickar objekt eller ren sträng
         room: actualChatRoom,
         user: userName,
       };
@@ -57,8 +57,8 @@ function App() {
     if (!inputMessage.trim()) return; // Tomt meddelande? gör inget
 
     const msgObject = {
-      idm: socket.id, //socket.id,
-      msg: inputMessage,
+      id: socket.id, //socket.id,
+      message: inputMessage,
       date: new Date().toLocaleString(),
       room: actualChatRoom,
       user: userName,
@@ -80,8 +80,13 @@ function App() {
           <p className="actual-usr">{userName}</p>
         </div>
         <div className="menti-container">
-          <div className="list-users">
-            
+          <div className="list-holder">
+            <div className="answer">
+              <input placeholder="Write your answer"/>
+            </div>
+            <div className="list-users">
+              {userName}
+            </div>
           </div>
           <div className="input-container">
             <div className="input-section">
