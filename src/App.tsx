@@ -82,7 +82,7 @@ function App() {
         <div className="menti-container">
           <div className="list-holder">
             <div className="answer">
-              <input placeholder="Write your answer"/>
+              <input id="loggedInInput" placeholder="Write your answer"/>
             </div>
             <div className="list-users">
               {userName}

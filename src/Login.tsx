@@ -29,7 +29,7 @@ function Login({ userName, setUserLogin, setUserName, userLogin }) {
           <div className="login-container">
             <div className="login">
               <h3>Välkommen till</h3>
-              <p>Ciculus Tertius - skolchat</p>
+              <p>Circulus Tertius - Skolchatt</p>
               <input
                 className="input-login"
                 type="text"
