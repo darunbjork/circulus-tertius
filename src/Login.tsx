@@ -12,7 +12,7 @@ function Login({ userName, setUserLogin, setUserName, userLogin }) {
     }
     const newUsers = {
       id: Date.now(),
-      username: userName,
+      sender: userName,
     };
     setUserLogin([...userLogin, newUsers]);
     setShowBox(!showBox);

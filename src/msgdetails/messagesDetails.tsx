@@ -4,7 +4,7 @@ const MessagesDetails = ({ messages }) => {
       {messages.map((m) => (
         <div className="msg">
           <div className="msg-header">
-            <p className="usr-name">{m.user}</p>
+            <p className="usr-name">{m.sender}</p>
             <p className="msg-date">{m.date}</p>
           </div>
           <div className="msg-content-holder">

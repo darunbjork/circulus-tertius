@@ -41,7 +41,7 @@ function App() {
         date: data.date || new Date().toLocaleString(),
         message: data.msg || data, // Om servern skickar objekt eller ren sträng
         room: actualChatRoom,
-        user: userName,
+        sender: userName,
       };
       setMessages((prev) => [...prev, newMessage]);
     });
@@ -61,7 +61,7 @@ function App() {
       message: inputMessage,
       date: new Date().toLocaleString(),
       room: actualChatRoom,
-      user: userName,
+      sender: userName,
     };
 
     socket.emit(actualChatRoom, msgObject);
