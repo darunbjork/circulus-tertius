@@ -34,12 +34,12 @@ function App() {
       setConnected(false);
     });
 
-    socket.on(actualChatRoom, (data) => {
+    socket.on(actualChatRoom, (data: typeMessages) => {
       console.log("Data received: ", data);
-      const newMessage = {
+      const newMessage: typeMessages = {
         id: data.id || socket.id, // Om servern skickar id, annars ditt eget "data.id || socket.id"
         date: data.date || new Date().toLocaleString(),
-        message: data.msg || data, // Om servern skickar objekt eller ren sträng
+        message: data.message || data, // Om servern skickar objekt eller ren sträng
         room: actualChatRoom,
         sender: userName,
       };
@@ -56,8 +56,8 @@ function App() {
   const sendMessage = () => {
     if (!inputMessage.trim()) return; // Tomt meddelande? gör inget
 
-    const msgObject = {
-      id: socket.id, //socket.id,
+    const msgObject: typeMessages = {
+      id: data.id || socket.id, 
       message: inputMessage,
       date: new Date().toLocaleString(),
       room: actualChatRoom,
@@ -97,7 +97,6 @@ function App() {
           </div>
         </div>
       </div>
-      {/*  */}
     </div>
   );
 }
