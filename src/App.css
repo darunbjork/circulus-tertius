@@ -1,42 +1,127 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2em 0 0;
   text-align: center;
 }
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.messages {
+  overflow: auto;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#container {
+  display: flex;
+  justify-content: space-around;
+  height: 90vh;
+  width: 100wp;
+  overflow: hidden;
+}
+.interaction-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 1px solid #777;
+  padding: 20px;
+}
+.status-holder {
+  background-color: #fff;
+  border-radius: 10px;
+  min-width: 60px;
+  max-width: 100px;
+  padding: 5px;
+  margin: 0 80%;
+}
+.connection-status {
+  font-size: 0.5em;
+}
+.actual-usr {
+  font-size: 0.6em;
+  font-weight: bold;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.input-section textarea {
+  border-radius: 15px;
+  padding: 20px;
+  font-size: 0.9em;
 }
 
-.card {
-  padding: 2em;
+.login-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 70;
+  background-image: radial-gradient(rgba(50, 51, 52, 0.8) 1px, transparent 1px);
+  background-size: 4px 4px;
+  background-color: #1c1c1c99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-.read-the-docs {
-  color: #888;
+.login {
+  background-color: #fff;
+  border-radius: 30px;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  z-index: 99;
+  box-shadow: 1px 1px 5px #FFF;
+  border: 10px solid #CCC;
+}
+.input-login {
+  width: 60%;
+  height: 20px;
+  padding: 10px;
+}
+.btn-login {
+  background-color: greenyellow;
+  border: 1px solid greenyellow;
+  border-radius: 20px;
+  padding: 15px;
+}
+.btn-login:hover {
+  cursor: pointer;
+}
+.error-login {
+  color: red;
+  font-size: 0.8em;
+}
+.btn-send {
+  background-color: lightskyblue;
+  border: 1px solid lightblue;
+  border-radius: 20px;
+  padding: 15px;
+}
+.input-section{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+}
+.list-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.menti-container{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.list-users {
+  border: 1px solid #CCC;
+  border-radius: 20px;
+  min-height: 20%;
+  min-width: 30%;
+  padding: 20px;
+  margin: 10px;
+  text-align: left;
+  color: #FFF;
 }
